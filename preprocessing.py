@@ -4,17 +4,17 @@ import numpy as np
 import pandas as pd
 import re
 from emot.emo_unicode import UNICODE_EMO, EMOTICONS
-<<<<<<< HEAD
+
 from collections import Counter
 from keras.models import Sequential
 from keras.layers import Dense, LSTM, Dropout, Bidirectional, Activation
 import matplotlib.pyplot as plt
 import gensim.models
-=======
+
 from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.sequence import pad_sequences
 
->>>>>>> parent of a2ac4b4... Update preprocessing.py
+
 def readFile(fileName):
     file = open(fileName,'r',encoding="cp437")
     fileStr = ""
@@ -53,7 +53,7 @@ def pad_features(reviews_ints, seq_length):
 def full_pre_process():
     # Read stop words file - words that can be removed
     stopWordsSet = set(readFile('stopwords_en.txt').split())      
-    loc = (r'C:/Users/Tom/Documents/GitHub/dataMining/dataSet.csv')
+    loc = (r'C:\Users\Tom\Downloads\Sentiment-Analysis-Dataset (1)\Sentiment Analysis Dataset.csv')
     
     # Assign colum names to the dataset
     colnames = ['itemID', 'Sentiment', 'SentimentSource', 'SentimentText']
@@ -64,7 +64,7 @@ def full_pre_process():
     #tweets = sorted(set(tweetsData['SentimentText']), key=tweetsData.index)
     ################
     #REMOVE [0:499]!!!!!!!!!!!!!!!!
-    tweets = list(tweetsData['SentimentText'][0:499])
+    tweets = list(tweetsData['SentimentText'][0:2500])
     del tweets[0]
     
     #splited = [set() for _ in range(len(tweets))]
@@ -86,14 +86,14 @@ def full_pre_process():
         for wordInside in tweet:
             changed = convert_emoticons(wordInside)
             tweet[i] = changed
-<<<<<<< HEAD
+
             if len(changed)==0:
                 tweet.remove(tweet[i])
             else:
                 i += 1
-    w2v_model=gensim.models.Word2Vec(cleanTweets,size=20,min_count=1,window=5,iter=50)
-    y=w2v_model.wv['frown']
-    print(y)
+    w2v_model=gensim.models.Word2Vec(cleanTweets,size=300,min_count=1,window=5,iter=50)
+    
+    
     list1=[]    
     for tweet in cleanTweets:
         Tweet=[]
@@ -103,22 +103,16 @@ def full_pre_process():
             count1+=1
         res=40-count1
         for i in range(res):
-           Tweet.append([0]*20) 
+           Tweet.append([0]*300) 
         matrix=np.asmatrix(Tweet)
         list1.append(matrix)
-    print(list1)
-    return cleanTweets,list1,tweetsData['Sentiment'][1:490]
-cleanTweets,listTweetsMatrices,sentiment=full_pre_process()
+    a = np.array(list1)
+    print(a)
   
-=======
-            i += 1
-    max_features=2000
-    tokenizer=Tokenizer(num_words=max_features,split='')
-    tokenizer.fit_on_texts(cleanTweets)
-    X=tokenizer.texts_to_sequences(cleanTweets)
-    X=pad_sequences(X)
-    return X,tweetsData['Sentiment'][1:]
-X,sentiment=full_pre_process()
+ 
+    return cleanTweets,a,tweetsData['Sentiment'][1:2494].to_numpy(dtype="uint8")
+cleanTweets,TweetsMatrices,sentiment=full_pre_process()
+print(TweetsMatrices.shape[2])
 
 
 
@@ -126,7 +120,7 @@ X,sentiment=full_pre_process()
 
 
 
->>>>>>> parent of a2ac4b4... Update preprocessing.py
+
 
 
 
