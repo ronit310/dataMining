@@ -9,8 +9,6 @@ from collections import Counter
 from keras.models import Sequential
 from keras.layers import Dense, LSTM, Dropout, Bidirectional, Activation
 import matplotlib.pyplot as plt
-from keras.preprocessing.text import Tokenizer
-from keras.preprocessing.sequence import pad_sequences
 import gensim.models
 =======
 from keras.preprocessing.text import Tokenizer
@@ -93,15 +91,24 @@ def full_pre_process():
                 tweet.remove(tweet[i])
             else:
                 i += 1
-    tokenizer = Tokenizer(num_words=5000)
-    tokenizer.fit_on_texts(cleanTweets)
-    sequences = tokenizer.texts_to_sequences(cleanTweets)
-    tweets = pad_sequences(sequences, maxlen=200)
-    
-    
-    
-    return cleanTweets,tweets,tweetsData['Sentiment'][1:490]
-
+    w2v_model=gensim.models.Word2Vec(cleanTweets,size=20,min_count=1,window=5,iter=50)
+    y=w2v_model.wv['frown']
+    print(y)
+    list1=[]    
+    for tweet in cleanTweets:
+        Tweet=[]
+        count1=0
+        for word in tweet:
+            Tweet.append(w2v_model.wv[word])
+            count1+=1
+        res=40-count1
+        for i in range(res):
+           Tweet.append([0]*20) 
+        matrix=np.asmatrix(Tweet)
+        list1.append(matrix)
+    print(list1)
+    return cleanTweets,list1,tweetsData['Sentiment'][1:490]
+cleanTweets,listTweetsMatrices,sentiment=full_pre_process()
   
 =======
             i += 1
