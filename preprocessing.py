@@ -3,12 +3,8 @@
 import numpy as np
 import pandas as pd
 import re
-import math
-import xlrd
-import csv
-import openpyxl
-from keras.preprocessing.sequence import pad_sequences
 from emot.emo_unicode import UNICODE_EMO, EMOTICONS
+<<<<<<< HEAD
 from collections import Counter
 from keras.models import Sequential
 from keras.layers import Dense, LSTM, Dropout, Bidirectional, Activation
@@ -16,6 +12,11 @@ import matplotlib.pyplot as plt
 from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.sequence import pad_sequences
 import gensim.models
+=======
+from keras.preprocessing.text import Tokenizer
+from keras.preprocessing.sequence import pad_sequences
+
+>>>>>>> parent of a2ac4b4... Update preprocessing.py
 def readFile(fileName):
     file = open(fileName,'r',encoding="cp437")
     fileStr = ""
@@ -28,26 +29,17 @@ def readFile(fileName):
 # Change to lower 
 def preProcess(fileStr):
     fileStr = re.sub(" +"," ", fileStr)
-    fileStr = re.sub("[^a-zA-Z:)( ]","", fileStr)
+    fileStr = re.sub("[^a-zA-Z ]","", fileStr)
     fileStr = fileStr.lower()
     return fileStr
-# Remove extra spaces
-# Remove non-letter chars    
-# Change to lower 
-def preProcess1(fileStr):
-    fileStr = re.sub(" +"," ", fileStr)
-    fileStr = re.sub("[^a-zA-Z] ","", fileStr)
-    fileStr = fileStr.lower()
-    return fileStr
+
 def diff(first, second):
         return [item for item in first if item not in second]
 
 def convert_emoticons(text):
     for emot in EMOTICONS:
-        text = re.sub(u"^" + emot + "$", " ".join(EMOTICONS[emot].replace(",","").split()), text)
-        preProcess1(text)
-        arr=text.split(" ")
-    return arr[0]
+        text = re.sub(u"^" + emot + "$", "_".join(EMOTICONS[emot].replace(",","").split()), text)
+    return text
 
 def pad_features(reviews_ints, seq_length):
     
@@ -63,7 +55,7 @@ def pad_features(reviews_ints, seq_length):
 def full_pre_process():
     # Read stop words file - words that can be removed
     stopWordsSet = set(readFile('stopwords_en.txt').split())      
-    loc = (r'C:\Users\Tom\Downloads\Sentiment-Analysis-Dataset\Sentiment Analysis Dataset.csv')
+    loc = (r'C:/Users/Tom/Documents/GitHub/dataMining/dataSet.csv')
     
     # Assign colum names to the dataset
     colnames = ['itemID', 'Sentiment', 'SentimentSource', 'SentimentText']
@@ -83,7 +75,6 @@ def full_pre_process():
     
     i=0
     for tweet in tweets:
-       tweet=preProcess(tweet)
        cleanTweets[i] = list(tweet.split())
        cleanTweets[i] = diff(cleanTweets[i], stopWordsSet)
        if len(cleanTweets[i]) == 0:
@@ -96,10 +87,8 @@ def full_pre_process():
         i = 0
         for wordInside in tweet:
             changed = convert_emoticons(wordInside)
-            changed=preProcess1(changed)
-            #changed = list(changed.split())
-            #changed = diff(changed, stopWordsSet)
             tweet[i] = changed
+<<<<<<< HEAD
             if len(changed)==0:
                 tweet.remove(tweet[i])
             else:
@@ -114,6 +103,23 @@ def full_pre_process():
     return cleanTweets,tweets,tweetsData['Sentiment'][1:490]
 
   
+=======
+            i += 1
+    max_features=2000
+    tokenizer=Tokenizer(num_words=max_features,split='')
+    tokenizer.fit_on_texts(cleanTweets)
+    X=tokenizer.texts_to_sequences(cleanTweets)
+    X=pad_sequences(X)
+    return X,tweetsData['Sentiment'][1:]
+X,sentiment=full_pre_process()
+
+
+
+
+
+
+
+>>>>>>> parent of a2ac4b4... Update preprocessing.py
 
 
 
