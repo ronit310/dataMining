@@ -18,11 +18,8 @@ from emot.emo_unicode import UNICODE_EMO, EMOTICONS
 from collections import Counter
 import keras
 from keras.models import Sequential
-from keras.utils import np_utils
-from keras.layers import Dense, LSTM, Dropout, Bidirectional, Activation,Embedding,SpatialDropout1D,Conv1D,Flatten,MaxPooling1D
+from keras.layers import Dense, LSTM, Dropout, Bidirectional, Activation,Embedding,SpatialDropout1D
 from preprocessing import full_pre_process
-from sklearn.model_selection import train_test_split
-from keras.callbacks import ModelCheckpoint
 import matplotlib.pyplot as plt
 from keras.callbacks import ModelCheckpoint
 <<<<<<< HEAD
@@ -55,6 +52,7 @@ predictions = model1.predict(X_test)
 
 <<<<<<< HEAD
 def LstmModel():
+<<<<<<< HEAD
     
    
     cleanTweets,X,sentiment=full_pre_process()
@@ -115,3 +113,14 @@ predictions = model1.predict(X_test)
 
 
 >>>>>>> parent of 9e682a8... Revert "lstm works!!!"
+=======
+    max_features=2000
+    X,sentiment=full_pre_process()
+    embed_dim=128
+    lstm_out=196
+    model=Sequential()
+    model.add(Embedding(max_features,embed_dim,input_length=X.shape[1]))
+    model.add(SpatialDropout1D(0.4))
+    model.add(LSTM(lstm_out))
+    
+>>>>>>> parent of 310ad1e... update LSTM
