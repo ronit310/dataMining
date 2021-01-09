@@ -94,6 +94,7 @@ def full_pre_process():
             else:
                 i += 1
 <<<<<<< HEAD
+<<<<<<< HEAD
     w2v_model=gensim.models.Word2Vec(cleanTweets,size=300,min_count=1,window=5,iter=50)
     
     
@@ -111,6 +112,18 @@ def full_pre_process():
         list1.append(matrix)
     a = np.array(list1)
     print(a)
+=======
+    tokenizer = Tokenizer(num_words=5000)
+    tokenizer.fit_on_texts(cleanTweets)
+    sequences = tokenizer.texts_to_sequences(cleanTweets)
+    tweets = pad_sequences(sequences, maxlen=200)
+    
+    
+    
+    return cleanTweets,tweets,tweetsData['Sentiment'][1:490]
+
+  
+>>>>>>> parent of 9e682a8... Revert "lstm works!!!"
 =======
     tokenizer = Tokenizer(num_words=5000)
     tokenizer.fit_on_texts(cleanTweets)
